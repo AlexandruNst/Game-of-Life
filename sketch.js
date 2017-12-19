@@ -3,10 +3,11 @@ var w;
 var grid;
 var newGrid;
 var keyP;
+var randP;
 
 
 function setup() {
-    createCanvas(900, 900);
+    createCanvas(900, 930);
     w = floor(width / sqPerLine);
     grid = create2DArray();
 
@@ -17,20 +18,24 @@ function setup() {
     }
 
     keyP = false;
+    randP = false;
 }
 
 
 function draw() {
 
-    if (keyP == false) {
+    if (randP && !keyP) {
+        fillGrid();
+        write("You can add or remove live cells, as well as wipe the board. Press enter to run the game.");
+    } else if (keyP == false) {
 
         fillGrid();
-        write("Enter live cells and press any key.");
+        write("Enter live cells. Press 'r' to randomise or 'w' to wipe the board. Press enter to run the game.");
 
     } else {
 
         fillGrid();
-        write("Game is running. Press any key to return.");
+        write("Game is running. Press enter again to pause. Press 'w' to wipe the board and start again.");
 
         newGrid = create2DArray();
 
@@ -57,7 +62,7 @@ function draw() {
 function mousePressed() {
     for (var i = 0; i < sqPerLine; i++) {
         for (var j = 0; j < sqPerLine; j++) {
-            if (mouseX > i * w && mouseX < i * w + w && mouseY > j * w && mouseY < j * w + w) {
+            if (mouseX > i * w && mouseX < i * w + w && mouseY > j * w + 30 && mouseY < j * w + w + 30) {
                 if (grid[i][j] == 0) {
                     grid[i][j] = 1;
                 } else {
@@ -69,13 +74,49 @@ function mousePressed() {
     }
 }
 
-function keyPressed() {
-    if (!keyP) {
-        keyP = true;
-    } else if (keyP) {
+function keyTyped() {
+    if (key == 'r') {
+        if (!keyP) {
+            for (var i = 0; i < sqPerLine; i++) {
+                for (var j = 0; j < sqPerLine; j++) {
+                    grid[i][j] = floor(random(2));
+                }
+            }
+
+            keyP = false;
+            randP = true;
+        }
+    }
+
+    if (key == 'w') {
+        for (var i = 0; i < sqPerLine; i++) {
+            for (var j = 0; j < sqPerLine; j++) {
+                grid[i][j] = 0;
+            }
+        }
+
+        randP = false;
         keyP = false;
     }
+
+    if (keyCode == 13) {
+        if (!keyP) {
+            keyP = true;
+        } else if (keyP) {
+            keyP = false;
+        }
+    }
 }
+
+// function keyPressed() {
+//     if (keyCode == 13) {
+//         if (!keyP) {
+//             keyP = true;
+//         } else if (keyP) {
+//             keyP = false;
+//         }
+//     }
+// }
 
 function create2DArray() {
     var arr = new Array(sqPerLine);
@@ -114,14 +155,15 @@ function fillGrid() {
             } else {
                 fill(255);
             }
-            rect(i * w, j * w, w - 3, w - 3);
+            rect(i * w, j * w + 30, w - 3, w - 3);
         }
     }
 }
 
 function write(words) {
-    noStroke();
+    strokeWeight(2);
+    stroke(255);
     fill(0);
-    textSize(20);
-    text(words, 10, 30);
+    textSize(19);
+    text(words, 1, 20);
 }
