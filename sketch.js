@@ -108,16 +108,6 @@ function keyTyped() {
     }
 }
 
-// function keyPressed() {
-//     if (keyCode == 13) {
-//         if (!keyP) {
-//             keyP = true;
-//         } else if (keyP) {
-//             keyP = false;
-//         }
-//     }
-// }
-
 function create2DArray() {
     var arr = new Array(sqPerLine);
     for (var i = 0; i < arr.length; i++) {
