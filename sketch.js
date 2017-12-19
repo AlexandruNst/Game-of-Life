@@ -12,7 +12,7 @@ function setup() {
 
     for (var i = 0; i < sqPerLine; i++) {
         for (var j = 0; j < sqPerLine; j++) {
-            grid[i][j] = floor(random(2));
+            grid[i][j] = 0;
         }
     }
 
@@ -21,41 +21,60 @@ function setup() {
 
 
 function draw() {
-    background(51);
-    noStroke();
 
-    //console.log("input");
+    if (keyP == false) {
 
-    for (var i = 0; i < sqPerLine; i++) {
-        for (var j = 0; j < sqPerLine; j++) {
-            if (grid[i][j] == 1) {
-                fill(0);
-            } else {
-                fill(255);
-            }
-            rect(i * w, j * w, w, w);
-        }
-    }
+        fillGrid();
+        write("Enter live cells and press any key.");
 
-    newGrid = create2DArray();
+    } else {
 
-    for (var i = 0; i < sqPerLine; i++) {
-        for (var j = 0; j < sqPerLine; j++) {
+        fillGrid();
+        write("Game is running. Press any key to return.");
 
-            var current = grid[i][j];
-            var neighbours = countNearbyLives(i, j);
+        newGrid = create2DArray();
 
-            if (current == 0 && neighbours == 3) {
-                newGrid[i][j] = 1;
-            } else if (current == 1 && (neighbours < 2 || neighbours > 3)) {
-                newGrid[i][j] = 0;
-            } else {
-                newGrid[i][j] = current;
+        for (var i = 0; i < sqPerLine; i++) {
+            for (var j = 0; j < sqPerLine; j++) {
+
+                var current = grid[i][j];
+                var neighbours = countNearbyLives(i, j);
+
+                if (current == 0 && neighbours == 3) {
+                    newGrid[i][j] = 1;
+                } else if (current == 1 && (neighbours < 2 || neighbours > 3)) {
+                    newGrid[i][j] = 0;
+                } else {
+                    newGrid[i][j] = current;
+                }
             }
         }
-    }
 
-    grid = newGrid;
+        grid = newGrid;
+    }
+}
+
+function mousePressed() {
+    for (var i = 0; i < sqPerLine; i++) {
+        for (var j = 0; j < sqPerLine; j++) {
+            if (mouseX > i * w && mouseX < i * w + w && mouseY > j * w && mouseY < j * w + w) {
+                if (grid[i][j] == 0) {
+                    grid[i][j] = 1;
+                } else {
+                    grid[i][j] = 0;
+                }
+                break;
+            }
+        }
+    }
+}
+
+function keyPressed() {
+    if (!keyP) {
+        keyP = true;
+    } else if (keyP) {
+        keyP = false;
+    }
 }
 
 function create2DArray() {
@@ -81,4 +100,28 @@ function countNearbyLives(i, j) {
     }
 
     return lives;
+}
+
+function fillGrid() {
+    background(255);
+    strokeWeight(2);
+    stroke(0, 0, 0, 20);
+
+    for (var i = 0; i < sqPerLine; i++) {
+        for (var j = 0; j < sqPerLine; j++) {
+            if (grid[i][j] == 1) {
+                fill(0);
+            } else {
+                fill(255);
+            }
+            rect(i * w, j * w, w - 3, w - 3);
+        }
+    }
+}
+
+function write(words) {
+    noStroke();
+    fill(0);
+    textSize(20);
+    text(words, 10, 30);
 }
