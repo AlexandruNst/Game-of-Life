@@ -29,7 +29,7 @@ function setup() {
 
     startButton = createButton("Start");
     startButton.style('font-size', '30px');
-    startButton.position(width / 2 - 30, 700);
+    startButton.position(width / 2 - 30, height - height / 4);
     startButton.size(100, 60);
     startButton.mousePressed(play);
 }
@@ -182,7 +182,7 @@ function pageInit() {
     textAlign(CENTER);
 
     background(255);
-    textSize(60);
+    textSize(width / 15);
     fill(0);
     text("The Game of Life", width / 2, 200);
 
@@ -194,7 +194,7 @@ function pageInit() {
     rect(width / 13, 300, 35, 35);
 
     noStroke();
-    textSize(30);
+    textSize(width / 30);
     fill(0);
     text("Black cells are alive", width / 13 + 45, 330);
 
@@ -204,13 +204,13 @@ function pageInit() {
     rect(width / 2 + width / 13, 300, 35, 35);
 
     noStroke();
-    textSize(30);
+    textSize(width / 30);
     fill(0);
     text("White cells are dead", width / 2 + width / 13 + 40, 330);
 
     textAlign(CENTER);
 
-    textSize(28);
+    textSize(width / 31);
     text("Any dead cell with 3 live neighbours becomes alive", width / 2, 430);
     text("Any live cell with less than 2 live neighbours dies", width / 2, 500);
     text("Any live cell with more than 3 live neighbours dies", width / 2, 550);
