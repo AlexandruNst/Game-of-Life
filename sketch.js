@@ -1,13 +1,17 @@
 var sqPerLine = 50;
+var offsetY = 30;
+
 var w;
 var grid;
 var newGrid;
 var keyP;
 var randP;
-
+var buttonP;
+var startButton;
+var check;
 
 function setup() {
-    createCanvas(900, 930);
+    createCanvas(900, 900 + offsetY);
     w = floor(width / sqPerLine);
     grid = create2DArray();
 
@@ -19,21 +23,28 @@ function setup() {
 
     keyP = false;
     randP = false;
-}
+    buttonP = false;
+    check = false;
 
+    startButton = createButton("Start");
+    startButton.style('font-size', '30px');
+    startButton.position(width / 2 - 30, height - height / 4);
+    startButton.size(100, 60);
+    startButton.mousePressed(play);
+}
 
 function draw() {
 
-    if (randP && !keyP) {
+    if (!buttonP) {
+        pageInit();
+    } else if (randP && !keyP) {
         fillGrid();
         write("You can add or remove live cells, as well as wipe the board. Press enter to run the game.");
     } else if (keyP == false) {
-
         fillGrid();
         write("Enter live cells. Press 'r' to randomise or 'w' to wipe the board. Press enter to run the game.");
-
+        check = true;
     } else {
-
         fillGrid();
         write("Game is running. Press enter again to pause. Press 'w' to wipe the board and start again.");
 
@@ -60,9 +71,10 @@ function draw() {
 }
 
 function mousePressed() {
+
     for (var i = 0; i < sqPerLine; i++) {
         for (var j = 0; j < sqPerLine; j++) {
-            if (mouseX > i * w && mouseX < i * w + w && mouseY > j * w + 30 && mouseY < j * w + w + 30) {
+            if (check && mouseX > i * w && mouseX < i * w + w && mouseY > j * w + offsetY && mouseY < j * w + w + offsetY) {
                 if (grid[i][j] == 0) {
                     grid[i][j] = 1;
                 } else {
@@ -75,8 +87,9 @@ function mousePressed() {
 }
 
 function keyTyped() {
+
     if (key == 'r') {
-        if (!keyP) {
+        if (!keyP && buttonP) {
             for (var i = 0; i < sqPerLine; i++) {
                 for (var j = 0; j < sqPerLine; j++) {
                     grid[i][j] = floor(random(2));
@@ -88,7 +101,7 @@ function keyTyped() {
         }
     }
 
-    if (key == 'w') {
+    if (key == 'w' && buttonP) {
         for (var i = 0; i < sqPerLine; i++) {
             for (var j = 0; j < sqPerLine; j++) {
                 grid[i][j] = 0;
@@ -99,7 +112,8 @@ function keyTyped() {
         keyP = false;
     }
 
-    if (keyCode == 13) {
+    // 13 represents the 'enter' key
+    if (keyCode == 13 && buttonP) {
         if (!keyP) {
             keyP = true;
         } else if (keyP) {
@@ -109,6 +123,7 @@ function keyTyped() {
 }
 
 function create2DArray() {
+
     var arr = new Array(sqPerLine);
     for (var i = 0; i < arr.length; i++) {
         arr[i] = new Array(sqPerLine);
@@ -118,6 +133,7 @@ function create2DArray() {
 }
 
 function countNearbyLives(i, j) {
+
     var lives = 0;
 
     for (var x = -1; x <= 1; x++) {
@@ -134,6 +150,7 @@ function countNearbyLives(i, j) {
 }
 
 function fillGrid() {
+
     background(255);
     strokeWeight(2);
     stroke(0, 0, 0, 20);
@@ -151,9 +168,57 @@ function fillGrid() {
 }
 
 function write(words) {
+
     strokeWeight(2);
     stroke(255);
     fill(0);
     textSize(19);
     text(words, 1, 20);
+}
+
+function play() {
+
+    startButton.hide();
+    buttonP = true;
+    textAlign(LEFT);
+}
+
+function pageInit() {
+
+    textAlign(CENTER);
+
+    background(255);
+    textSize(width / 15);
+    fill(0);
+    text("The Game of Life", width / 2, 200);
+
+    textAlign(LEFT);
+
+    stroke(0, 0, 0, 20);
+    strokeWeight(4);
+    fill(0);
+    rect(width / 13, 300, 35, 35);
+
+    noStroke();
+    textSize(width / 30);
+    fill(0);
+    text("Black cells are alive", width / 13 + 45, 330);
+
+    stroke(0, 0, 0, 20);
+    strokeWeight(4);
+    fill(255);
+    rect(width / 2 + width / 13, 300, 35, 35);
+
+    noStroke();
+    textSize(width / 30);
+    fill(0);
+    text("White cells are dead", width / 2 + width / 13 + 40, 330);
+
+    textAlign(CENTER);
+
+    textSize(width / 31);
+    text("Any dead cell with 3 live neighbours becomes alive", width / 2, 430);
+    text("Any live cell with less than 2 live neighbours dies", width / 2, 500);
+    text("Any live cell with more than 3 live neighbours dies", width / 2, 550);
+    text("Can you come up with patterns to keep the system moving?", width / 2, 620);
 }
