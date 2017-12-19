@@ -10,7 +10,6 @@ var buttonP;
 var startButton;
 var check;
 
-
 function setup() {
     createCanvas(900, 900 + offsetY);
     w = floor(width / sqPerLine);
@@ -33,7 +32,6 @@ function setup() {
     startButton.size(100, 60);
     startButton.mousePressed(play);
 }
-
 
 function draw() {
 
@@ -73,6 +71,7 @@ function draw() {
 }
 
 function mousePressed() {
+
     for (var i = 0; i < sqPerLine; i++) {
         for (var j = 0; j < sqPerLine; j++) {
             if (check && mouseX > i * w && mouseX < i * w + w && mouseY > j * w + offsetY && mouseY < j * w + w + offsetY) {
@@ -88,6 +87,7 @@ function mousePressed() {
 }
 
 function keyTyped() {
+
     if (key == 'r') {
         if (!keyP && buttonP) {
             for (var i = 0; i < sqPerLine; i++) {
@@ -123,6 +123,7 @@ function keyTyped() {
 }
 
 function create2DArray() {
+
     var arr = new Array(sqPerLine);
     for (var i = 0; i < arr.length; i++) {
         arr[i] = new Array(sqPerLine);
@@ -132,6 +133,7 @@ function create2DArray() {
 }
 
 function countNearbyLives(i, j) {
+
     var lives = 0;
 
     for (var x = -1; x <= 1; x++) {
@@ -148,6 +150,7 @@ function countNearbyLives(i, j) {
 }
 
 function fillGrid() {
+
     background(255);
     strokeWeight(2);
     stroke(0, 0, 0, 20);
@@ -165,6 +168,7 @@ function fillGrid() {
 }
 
 function write(words) {
+
     strokeWeight(2);
     stroke(255);
     fill(0);
@@ -173,12 +177,14 @@ function write(words) {
 }
 
 function play() {
+
     startButton.hide();
     buttonP = true;
     textAlign(LEFT);
 }
 
 function pageInit() {
+
     textAlign(CENTER);
 
     background(255);
