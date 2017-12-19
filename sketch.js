@@ -2,6 +2,7 @@ var sqPerLine = 50;
 var w;
 var grid;
 var newGrid;
+var keyP;
 
 
 function setup() {
@@ -14,12 +15,16 @@ function setup() {
             grid[i][j] = floor(random(2));
         }
     }
+
+    keyP = false;
 }
 
 
 function draw() {
     background(51);
     noStroke();
+
+    //console.log("input");
 
     for (var i = 0; i < sqPerLine; i++) {
         for (var j = 0; j < sqPerLine; j++) {
