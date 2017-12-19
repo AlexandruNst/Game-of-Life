@@ -4,6 +4,9 @@ var grid;
 var newGrid;
 var keyP;
 var randP;
+var buttonP;
+var startButton;
+var check = false;
 
 
 function setup() {
@@ -17,23 +20,75 @@ function setup() {
         }
     }
 
+    startButton = createButton("Start");
+    startButton.style('font-size', '30px');
+    startButton.position(width / 2 - 30, 700);
+    startButton.size(100, 60);
+    startButton.mousePressed(play);
+
     keyP = false;
     randP = false;
+    buttonP = false;
 }
 
 
 function draw() {
 
-    if (randP && !keyP) {
+    if (!buttonP) {
+        textAlign(CENTER);
+
+        background(255);
+        textSize(60);
+        fill(0);
+        text("The Game of Life", width / 2, 200);
+
+        stroke(0, 0, 0, 20);
+        strokeWeight(4);
+        fill(0);
+        rect(70, 300, 35, 35);
+
+        noStroke();
+        textSize(30);
+        fill(0);
+        text("Black cells are alive", 270, 330);
+
+        stroke(0, 0, 0, 20);
+        strokeWeight(4);
+        fill(255);
+        rect(470, 300, 35, 35);
+
+        noStroke();
+        textSize(30);
+        fill(0);
+        text("White cells are dead", 670, 330);
+
+        textSize(28);
+        text("Any dead cell with 3 live neighbours becomes alive", width / 2, 430);
+        text("Any live cell with less than 2 live neighbours dies", width / 2, 500);
+        text("Any live cell with more than 3 live neighbours dies", width / 2, 550);
+        text("Can you come up with patterns to keep the system moving?", width / 2, 620);
+
+
+        //button.hide();
+
+
+
+        // textAlign(CENTER);
+        // textSize(15);
+        // text("text", 0, 20);
+
+    } else if (randP && !keyP) {
+        //button.hide();
         fillGrid();
         write("You can add or remove live cells, as well as wipe the board. Press enter to run the game.");
     } else if (keyP == false) {
-
+        //button.hide();
         fillGrid();
         write("Enter live cells. Press 'r' to randomise or 'w' to wipe the board. Press enter to run the game.");
+        check = true;
 
     } else {
-
+        //button.hide();
         fillGrid();
         write("Game is running. Press enter again to pause. Press 'w' to wipe the board and start again.");
 
@@ -62,7 +117,7 @@ function draw() {
 function mousePressed() {
     for (var i = 0; i < sqPerLine; i++) {
         for (var j = 0; j < sqPerLine; j++) {
-            if (mouseX > i * w && mouseX < i * w + w && mouseY > j * w + 30 && mouseY < j * w + w + 30) {
+            if (check && mouseX > i * w && mouseX < i * w + w && mouseY > j * w + 30 && mouseY < j * w + w + 30) {
                 if (grid[i][j] == 0) {
                     grid[i][j] = 1;
                 } else {
@@ -76,7 +131,7 @@ function mousePressed() {
 
 function keyTyped() {
     if (key == 'r') {
-        if (!keyP) {
+        if (!keyP && buttonP) {
             for (var i = 0; i < sqPerLine; i++) {
                 for (var j = 0; j < sqPerLine; j++) {
                     grid[i][j] = floor(random(2));
@@ -88,7 +143,7 @@ function keyTyped() {
         }
     }
 
-    if (key == 'w') {
+    if (key == 'w' && buttonP) {
         for (var i = 0; i < sqPerLine; i++) {
             for (var j = 0; j < sqPerLine; j++) {
                 grid[i][j] = 0;
@@ -99,7 +154,7 @@ function keyTyped() {
         keyP = false;
     }
 
-    if (keyCode == 13) {
+    if (keyCode == 13 && buttonP) {
         if (!keyP) {
             keyP = true;
         } else if (keyP) {
@@ -156,4 +211,13 @@ function write(words) {
     fill(0);
     textSize(19);
     text(words, 1, 20);
+}
+
+function play() {
+    startButton.hide();
+    buttonP = true;
+    textAlign(LEFT);
+
+    //return false;
+
 }
